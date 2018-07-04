@@ -106,7 +106,7 @@ public class PagamentoService {
 	}
 	
 	private String getValorAPagar(Inscricao inscricao) {
-		return  new BigDecimal (inscricao.getEvento().getPrecoTotal().toString()).toString().replace(".",",");
+		return  inscricao.getEvento().getPrecoTotal();
 	}
 	
 	private String getCodigoInscricao(Inscricao inscricao) {
