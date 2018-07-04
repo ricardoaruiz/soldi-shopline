@@ -106,7 +106,7 @@ public class PagamentoService {
 	}
 	
 	private String getValorAPagar(Inscricao inscricao) {
-		return  inscricao.getEvento().getPrecoTotal();
+		return  inscricao.getEvento().getValorAPagar();
 	}
 	
 	private String getCodigoInscricao(Inscricao inscricao) {

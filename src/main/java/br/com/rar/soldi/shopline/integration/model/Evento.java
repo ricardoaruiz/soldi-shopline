@@ -19,7 +19,7 @@ public class Evento implements Serializable{
 	@JsonProperty("dt_fim")
 	private String dataFim;
 	private String preco;
-	private String precoTotal;
+	private String valorAPagar;
 	
 	public int getId() {
 		return id;
@@ -63,11 +63,11 @@ public class Evento implements Serializable{
 	public void setPreco(String preco) {
 		this.preco = preco;
 	}
-	public String getPrecoTotal() {
-		return precoTotal;
+	public String getValorAPagar() {
+		return valorAPagar;
 	}
-	public void setPrecoTotal(String precoTotal) {
-		this.precoTotal = precoTotal;
+	public void setValorAPagar(String precoTotal) {
+		this.valorAPagar = precoTotal;
 	}
 	
 }
