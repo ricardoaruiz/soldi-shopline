@@ -1,8 +1,6 @@
 package br.com.rar.soldi.shopline.service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.NumberFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,11 +25,17 @@ public class PagamentoService {
 	@Autowired
 	private ApiSoldi apiSoldi;
 	
-	@Value("${codigoEmpresa}")
-	private String codigoEmpresa;
+	@Value("${codigoEmpresaSoldi}")
+	private String codigoEmpresaSoldi;
 	
-	@Value("${codigoCriptografia}")
-	private String codigoCriptografia;
+	@Value("${codigoCriptografiaSoldi}")
+	private String codigoCriptografiaSoldi;
+	
+	@Value("${codigoEmpresaAesas}")
+	private String codigoEmpresaAesas;
+	
+	@Value("${codigoCriptografiaAesas}")
+	private String codigoCriptografiaAesas;	
 	
 	@Value("${numeroDiasVencimentoBoleto}")
 	private int numeroDiasVencimentoBoleto;	
@@ -60,6 +64,8 @@ public class PagamentoService {
 			
 	private String getDadosPagamento(Inscricao inscricao) throws DadosObrigatoriosPagamentoException {
 		
+		String codigoEmpresa = getCodigoEmpresa(inscricao);
+		String codigoCriptografia = getCodigoCriptografia(inscricao);
 		String pedido = getPedido(inscricao);
 		String valorAPagar = getValorAPagar(inscricao);
 		String nomeSacado = getNomeSacado(inscricao);		
@@ -151,6 +157,28 @@ public class PagamentoService {
 
 	private String getBairroSacado(Inscricao inscricao) {		
 		return inscricao.getPessoa() == null || inscricao.getPessoa().getEndereco() == null ? "" : inscricao.getPessoa().getEndereco().getBairro();
+	}
+	
+	private String getCodigoEmpresa(Inscricao inscricao) throws DadosObrigatoriosPagamentoException {
+		switch (inscricao.getEvento().getOrganizador()) {
+		case "1":
+			return this.codigoEmpresaAesas;
+		case "2":
+			return this.codigoEmpresaSoldi; 
+		default:
+			throw new DadosObrigatoriosPagamentoException("Dados obrigatórios para o pagamento (empresa) não foram informados. Entre em contato com a organização do evento");
+		} 
+	}
+	
+	private String getCodigoCriptografia(Inscricao inscricao) throws DadosObrigatoriosPagamentoException {
+		switch (inscricao.getEvento().getOrganizador()) {
+		case "1":
+			return this.codigoCriptografiaAesas;
+		case "2":
+			return this.codigoCriptografiaSoldi; 
+		default:
+			throw new DadosObrigatoriosPagamentoException("Dados obrigatórios para o pagamento (cripto) não foram informados. Entre em contato com a organização do evento");
+		} 
 	}	
 	
 }
