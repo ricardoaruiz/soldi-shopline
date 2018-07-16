@@ -24,7 +24,7 @@
 <title>Pagamento - Soldi</title>
 </head>
 <body onload="submitForm()">
-	<form name="form1" action="https://shopline.itau.com.br/shopline/shopline.aspx" method="post">
+	<form name="form1" th:action="${shoplineUrl}" method="post">
 		<input type="hidden" name="DC" th:value="${dadosPagamento}">
 		<div class="msg">
 			<img src="soldi.gif">

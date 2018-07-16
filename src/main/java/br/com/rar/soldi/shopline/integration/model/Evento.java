@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Evento implements Serializable{
 
-	private static final long serialVersionUID = 5099894425401257038L;
+	private static final long serialVersionUID = -3349573168943278725L;
 	
 	private int id;
 	private String titulo;
@@ -18,8 +18,9 @@ public class Evento implements Serializable{
 	private String dataInicio;
 	@JsonProperty("dt_fim")
 	private String dataFim;
-	private Double preco;
-	private Double precoTotal;
+	private String preco;
+	private String valorAPagar;
+	private String organizador;
 	
 	public int getId() {
 		return id;
@@ -57,17 +58,23 @@ public class Evento implements Serializable{
 	public void setDataFim(String dataFim) {
 		this.dataFim = dataFim;
 	}
-	public Double getPreco() {
+	public String getPreco() {
 		return preco;
 	}
-	public void setPreco(Double preco) {
+	public void setPreco(String preco) {
 		this.preco = preco;
 	}
-	public Double getPrecoTotal() {
-		return precoTotal;
+	public String getValorAPagar() {
+		return valorAPagar;
 	}
-	public void setPrecoTotal(Double precoTotal) {
-		this.precoTotal = precoTotal;
+	public void setValorAPagar(String precoTotal) {
+		this.valorAPagar = precoTotal;
+	}
+	public String getOrganizador() {
+		return organizador;
+	}
+	public void setOrganizador(String organizador) {
+		this.organizador = organizador;
 	}
 	
 }
