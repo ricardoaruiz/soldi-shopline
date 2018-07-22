@@ -1,6 +1,7 @@
 package br.com.rar.soldi.shopline.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -112,7 +113,19 @@ public class PagamentoService {
 	}
 	
 	private String getValorAPagar(Inscricao inscricao) {
-		return  inscricao.getEvento().getValorAPagar();
+		int qtInscritos = inscricao.getInscritos() != null ? inscricao.getInscritos().size() : 1;
+		BigDecimal valorAPagar = new BigDecimal(inscricao.getEvento().getPreco()).multiply(new BigDecimal(qtInscritos));
+		
+		String valor = valorAPagar.toString().replace(".","#").replace(",","").replace("#",",");
+		if(valor.indexOf(",") > 0) {
+			if(valor.split(",")[1].length() == 1) {
+				valor += "0";
+			}
+		} else {
+			valor += ",00";
+		}
+		
+		return valor;
 	}
 	
 	private String getCodigoInscricao(Inscricao inscricao) {

@@ -1,19 +1,21 @@
 package br.com.rar.soldi.shopline.integration.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Inscricao implements Serializable{
 
-	private static final long serialVersionUID = 7425284843327647201L;
+	private static final long serialVersionUID = -4768491975634041700L;
 	
 	private String referencia;
 	private int tipo;
-	private Pessoa pessoa;	
-	private Evento evento;	
-	private Pagamento pagamento;	
+	private Pessoa pessoa;
+	private Evento evento;
+	private Pagamento pagamento;
+	private List<Inscrito> inscritos;
 
 	public String getReferencia() {
 		return referencia;
@@ -45,6 +47,12 @@ public class Inscricao implements Serializable{
 	}
 	public void setPagamento(Pagamento pagamento) {
 		this.pagamento = pagamento;
+	}
+	public List<Inscrito> getInscritos() {
+		return inscritos;
+	}
+	public void setInscritos(List<Inscrito> inscritos) {
+		this.inscritos = inscritos;
 	}
 	@Override
 	public String toString() {
