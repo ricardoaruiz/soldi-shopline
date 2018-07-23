@@ -113,19 +113,7 @@ public class PagamentoService {
 	}
 	
 	private String getValorAPagar(Inscricao inscricao) {
-		int qtInscritos = inscricao.getInscritos() != null ? inscricao.getInscritos().size() : 1;
-		BigDecimal valorAPagar = new BigDecimal(inscricao.getEvento().getPreco()).multiply(new BigDecimal(qtInscritos));
-		
-		String valor = valorAPagar.toString().replace(".","#").replace(",","").replace("#",",");
-		if(valor.indexOf(",") > 0) {
-			if(valor.split(",")[1].length() == 1) {
-				valor += "0";
-			}
-		} else {
-			valor += ",00";
-		}
-		
-		return valor;
+		return  inscricao.getEvento().getValorAPagar();
 	}
 	
 	private String getCodigoInscricao(Inscricao inscricao) {
