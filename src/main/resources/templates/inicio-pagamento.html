@@ -4,10 +4,15 @@
 <meta charset="UTF-8">
 <script>
 	function submitForm(){
-		document.form1.target = "myActionWin";
-		window.open("","myActionWin","toolbar=yes,menubar=yes,resizable=yes,status=no,scrollbars=yes,width=815,height=575");
-		document.form1.submit();
-		document.form2.submit();
+		var janelaPagamento = window.open("","myActionWin","toolbar=yes,menubar=yes,resizable=yes,status=no,scrollbars=yes,width=815,height=575");
+
+		if (janelaPagamento) {
+			document.form1.target = "myActionWin";			
+			document.form1.submit();
+			document.form2.submit();		
+		} else {
+			document.form3.submit();
+		}
 	}	
 </script>
 <style>
@@ -31,7 +36,9 @@
 			<h1>Redirecionando para o meio de pagamento...</h1>
 		</div>		
 	</form>	
-	<form name="form2" action="sucesso" method="get">
+	<form name="form2" action="sucesso" method="get"></form>
+	<form name="form3" action="erro-popup" method="post">
+		<input type="hidden" name="dadosPagamento" th:value="${dadosPagamento}">
 	</form>
 </body>
 </html>

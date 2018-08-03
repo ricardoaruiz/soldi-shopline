@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Pagamento - Soldi</title>
+<style>
+	.msg {
+		margin-top: 100px;
+		text-align: center;
+	}
+	h3 {
+		font-family: sans-serif;
+		color: #4F7A1E;		
+	}
+	.submit {
+		text-align: center;
+	    background-color: #4F7A1E;
+	    color: #ffffff;
+	    border-radius: 5px;
+	    border: 0;
+	    padding: 10px;
+    }
+</style>
+</head>
+<body>
+	<div class="msg">
+		<img src="soldi.gif">
+		<h3>Seu navegador está bloquendo a abertura de popups.</h3>
+		<h3>Mude as configurações do seu browser e tente novamente ou clique no botão abaixo para abrir na mesma janela.</h3>
+	</div>
+	
+	<form name="form1" th:action="${shoplineUrl}" method="post">
+		<input type="hidden" name="DC" th:value="${dadosPagamento}">
+		<center><input type="submit" class="submit" value="Abrir aqui" /></center>		
+	</form>	
+	
+</body>
+</html>

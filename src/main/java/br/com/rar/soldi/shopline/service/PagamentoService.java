@@ -69,6 +69,7 @@ public class PagamentoService {
 		String codigoCriptografia = getCodigoCriptografia(inscricao);
 		String pedido = getPedido(inscricao);
 		String valorAPagar = getValorAPagar(inscricao);
+		String observacao = getObservacao(inscricao);
 		String nomeSacado = getNomeSacado(inscricao);		
 		String codigoInscricao = getCodigoInscricao(inscricao);
 		String numeroInscricao = getNumeroInscricao(inscricao);				
@@ -84,7 +85,7 @@ public class PagamentoService {
 		return cripto.geraDados(codigoEmpresa, 
 						 pedido, 
 						 valorAPagar, 
-						 "", //Observacao
+						 observacao,
 						 codigoCriptografia, 
 						 nomeSacado, 
 						 codigoInscricao, 
@@ -114,6 +115,18 @@ public class PagamentoService {
 	
 	private String getValorAPagar(Inscricao inscricao) {
 		return  inscricao.getEvento().getValorAPagar();
+	}
+	
+	private String getObservacao(Inscricao inscricao) {
+		StringBuilder obs = new StringBuilder();
+		obs.append(inscricao.getEvento().getTitulo());
+		if(inscricao.getEvento().getDataInicio() != null) {
+			obs.append(" - de ").append(inscricao.getEvento().getDataInicio());
+		}
+		if(inscricao.getEvento().getDataFim() != null) {
+			obs.append(" até ").append(inscricao.getEvento().getDataFim());
+		}		
+		return obs.toString();
 	}
 	
 	private String getCodigoInscricao(Inscricao inscricao) {
