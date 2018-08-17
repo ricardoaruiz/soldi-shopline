@@ -59,6 +59,7 @@ public class PagamentoService {
 			}			
 			
 		} catch (IOException e) {
+			System.out.println(e);
 			throw new ServiceException("Ocorreu um erro ao processar o seu pagamento. Entre em contato com a organização do evento.", e);
 		}		
 	}
