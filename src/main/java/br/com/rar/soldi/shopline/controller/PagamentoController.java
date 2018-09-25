@@ -39,6 +39,16 @@ public class PagamentoController {
 		return mav;
 	}
 	
+	@GetMapping("/status-pagamento")
+	public void statusPagamento(@RequestParam("reference") String reference) {			
+		try {
+			this.pagamentoService.obtemDadosConsultaStatus(reference);
+		} catch (ServiceException | InscricaoNaoEncontradaException | DadosObrigatoriosPagamentoException e) {
+			// TODO verificar tratamentos de erros necessários
+			e.printStackTrace();
+		}		
+	}
+	
 	@GetMapping("/sucesso")
 	public String sucesso() {
 		return "sucesso-pagamento";

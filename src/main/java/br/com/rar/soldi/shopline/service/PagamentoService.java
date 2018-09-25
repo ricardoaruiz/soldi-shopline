@@ -1,16 +1,19 @@
 package br.com.rar.soldi.shopline.service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.google.gson.Gson;
+
 import br.com.rar.soldi.shopline.Itaucripto;
+import br.com.rar.soldi.shopline.integration.ApiConsultaStatusShopline;
 import br.com.rar.soldi.shopline.integration.ApiSoldi;
 import br.com.rar.soldi.shopline.integration.model.Inscricao;
+import br.com.rar.soldi.shopline.integration.model.StatusPagamento;
 import br.com.rar.soldi.shopline.service.exception.DadosObrigatoriosPagamentoException;
 import br.com.rar.soldi.shopline.service.exception.InscricaoNaoEncontradaException;
 import br.com.rar.soldi.shopline.service.exception.ServiceException;
@@ -22,9 +25,13 @@ public class PagamentoService {
 
 	private static final String PESSOA_FISICA = "01";
 	private static final String PESSOA_JURIDICA = "02";
+	private static final String FORMATO_CONSULTA_XML = "1";
 	
 	@Autowired
 	private ApiSoldi apiSoldi;
+	
+	@Autowired
+	private ApiConsultaStatusShopline apiConsultaStatusShopline;
 	
 	@Value("${codigoEmpresaSoldi}")
 	private String codigoEmpresaSoldi;
@@ -44,6 +51,33 @@ public class PagamentoService {
 	public String obtemDadosPagamento(String referencia) throws ServiceException, InscricaoNaoEncontradaException, DadosObrigatoriosPagamentoException {
 		Inscricao inscricao = obtemInscricao(referencia);
 		return getDadosPagamento(inscricao);
+	}
+	
+	// TODO aqui deve receber o id do evento e buscar todas as incrições novas do evento
+	public void obtemDadosConsultaStatus(String referencia) throws ServiceException, InscricaoNaoEncontradaException, DadosObrigatoriosPagamentoException {
+		
+		//Receber o id do evento e chamar um serviço na Soldi-api que retorne todas as inscrições novas
+
+		//Para cada inscrição retornada chamar o serviço de consulta do shopline e guargar o retorno em um map 
+		//onde a chave é a referencia da inscrição
+		
+		//No final pegar o map, montar uma request passando um json com um par de chave valor (referencia, status)
+		//para um serviço no Soldi-api para atualizar o status das inscrições
+		
+		try {
+			Inscricao inscricao = obtemInscricao(referencia);
+			String dadosConsultaStatusPagamento = getDadosConsultaStatusPagamento(inscricao);
+			Call<String> call = apiConsultaStatusShopline.getStatusPagamento().consultaStatus(dadosConsultaStatusPagamento);
+			Response<String> execute = call.execute();
+			
+			StatusPagamento statusPagamento = getStatusPagamento(execute.body().toString());			
+			System.out.println(statusPagamento);	
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	private Inscricao obtemInscricao(String referencia) throws ServiceException, InscricaoNaoEncontradaException {		
@@ -101,6 +135,33 @@ public class PagamentoService {
 						 "", 
 						 "", 
 						 "");
+	}
+
+	private String getDadosConsultaStatusPagamento(Inscricao inscricao) throws DadosObrigatoriosPagamentoException {		
+		String codigoEmpresa = getCodigoEmpresa(inscricao);
+		String pedido = getPedido(inscricao);
+		String formato = FORMATO_CONSULTA_XML;
+		String codigoCriptografia = getCodigoCriptografia(inscricao);
+		
+		return new Itaucripto().geraConsulta(codigoEmpresa, pedido, formato, codigoCriptografia);				
+	}
+	
+	private StatusPagamento getStatusPagamento(String body) {
+		try {
+			body = body.substring(body.indexOf("<PARAMETER>")+11);
+			body = body.substring(0, body.length()-11);
+			body = body.replace("</PARAMETER>", "");
+			body = body.replace("<PARAM ID=\"", "\"");
+			body = body.replace("\" VALUE=\"", "\" : \"");
+			body = body.replace("\"/>", "\",");			
+			body = "{" + body.substring(0, body.length()-3) + "}";
+			
+			Gson g = new Gson();
+			StatusPagamento statusPagamento = g.fromJson(body, StatusPagamento.class);
+			return statusPagamento;
+		} catch(Exception e) {
+			throw new IllegalStateException("Erro ao converter o retorno da consulta em Json", e);
+		}
 	}
 	
 	private void validaDadosObrigatorios(String codigoEmpresa, String pedido, String valorAPagar, String codigoCriptografia) throws DadosObrigatoriosPagamentoException {		
