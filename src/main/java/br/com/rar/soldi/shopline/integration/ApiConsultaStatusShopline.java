@@ -14,13 +14,16 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 @Service
 public class ApiConsultaStatusShopline {
 
+	/**
+	 * Url para consulta de status dos pagamentos
+	 */
 	@Value("${shoplineStatusUrl}")
-	private String shoplineStatusUrl = "https://shopline.itau.com.br/shopline/consulta.aspx/";
+	private String shoplineStatusUrl;
 	
 	private Retrofit retrofit;
 		
 	@PostConstruct
-	public void teste() {		
+	public void postConstruct() {		
 		
 		HttpLoggingInterceptor logging = new HttpLoggingInterceptor(); 
 		logging.setLevel(Level.BODY);
