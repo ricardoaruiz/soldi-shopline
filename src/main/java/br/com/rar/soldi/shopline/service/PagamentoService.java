@@ -101,9 +101,13 @@ public class PagamentoService {
 				Call<String> call = apiConsultaStatusShopline.getStatusPagamento().consultaStatus(dadosConsultaStatusPagamento);
 				Response<String> execute = call.execute();
 				
+				if (execute.errorBody() != null) {
+					throw new ServiceException("Erro na chamada ao serviço de consulta de status de pagamento");
+				}
+				
 				// Faz o parse do retorno do serviço
 				StatusPagamento statusPagamento = getStatusPagamento(execute.body().toString());
-				
+								
 				// Adiciona cada retorno do serviço na lista para ser devolvida ao controller
 				retorno.add(getDadosRetornoConsultaStatus(dados, statusPagamento));				
 			}

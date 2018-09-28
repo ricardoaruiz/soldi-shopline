@@ -66,15 +66,19 @@ public class PagamentoController {
 	@PostMapping("/status-pagamento")
 	public ResponseEntity<StatusPagamentoEventoResponse> obtemStatusPagamentoEvento(
 			@RequestBody StatusPagamentoEventoRequest request) {		
+		
+		StatusPagamentoEventoResponse statusPagamentoEventoResponse = new StatusPagamentoEventoResponse();
+		
 		try {		
-			StatusPagamentoEventoResponse statusPagamentoEventoResponse = new StatusPagamentoEventoResponse();
 			List<DadosStatusPagamentoEventoRetorno> dadosStatusPagamentoRetorno = this.pagamentoService.obtemDadosConsultaStatus(request);
 			statusPagamentoEventoResponse.getDados().addAll(dadosStatusPagamentoRetorno);
 			
 			return ResponseEntity.ok(statusPagamentoEventoResponse);
 		} catch (ServiceException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+			statusPagamentoEventoResponse.setErro(true);
+			statusPagamentoEventoResponse.setMensagemErro(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(statusPagamentoEventoResponse);
 		}		
 	}
 	
