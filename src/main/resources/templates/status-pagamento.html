@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<script>
+	function submitForm(){
+		//var janelaPagamento = window.open("","myActionWin","toolbar=yes,menubar=yes,resizable=yes,status=no,scrollbars=yes,width=815,height=575");
+
+		//if (janelaPagamento) {
+			// document.form1.target = "myActionWin";			
+			document.form1.submit();
+			// document.form2.submit();		
+		//} else {
+		//	document.form3.submit();
+		//}
+	}	
+</script>
+<style>
+	.msg {
+		margin-top: 100px;
+		text-align: center;
+	}
+	h1 {
+		font-family: sans-serif;
+		color: #4F7A1E;		
+	}
+</style>
+</head>
+<title>Pagamento - Soldi</title>
+</head>
+<body onload="submitForm()">
+	<form name="form1" th:action="${shoplineStatusUrl}" method="post">
+		<input type="hidden" name="DC" th:value="${dadosConsultaStatus}">
+		<div class="msg">
+			<img src="soldi.gif">
+			<h1>Redirecionando para o meio de pagamento...</h1>
+		</div>		
+	</form>	
+	<form name="form2" action="sucesso" method="get"></form>
+	<form name="form3" action="erro-popup" method="post">
+		<input type="hidden" name="dadosConsultaStatus" th:value="${dadosConsultaStatus}">
+	</form>
+</body>
+</html>

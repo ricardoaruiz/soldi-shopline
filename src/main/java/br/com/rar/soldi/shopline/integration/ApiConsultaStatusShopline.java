@@ -9,18 +9,21 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @Service
-public class ApiSoldi {
+public class ApiConsultaStatusShopline {
 
-	@Value("${soldiApiBaseUrl}")
-	private String soldiApiBaseUrl;
+	/**
+	 * Url para consulta de status dos pagamentos
+	 */
+	@Value("${shoplineStatusUrl}")
+	private String shoplineStatusUrl;
 	
 	private Retrofit retrofit;
 		
 	@PostConstruct
-	public void teste() {	
+	public void postConstruct() {		
 		
 		HttpLoggingInterceptor logging = new HttpLoggingInterceptor(); 
 		logging.setLevel(Level.BODY);
@@ -28,15 +31,15 @@ public class ApiSoldi {
 		httpClient.addInterceptor(logging);
 		
 		this.retrofit = new Retrofit.Builder()
-				.baseUrl(soldiApiBaseUrl)
-				.addConverterFactory(JacksonConverterFactory.create())
+				.baseUrl(shoplineStatusUrl)
+				.addConverterFactory(ScalarsConverterFactory.create())
 				.client(httpClient.build())
 				.build();
 		
 	}
 	
-	public InscricaoService getInscricaoService() {
-		return this.retrofit.create(InscricaoService.class);
+	public StatusPagamentoService getStatusPagamento() {
+		return this.retrofit.create(StatusPagamentoService.class);
 	}
 	
 }
